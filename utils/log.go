@@ -47,6 +47,7 @@ const (
 
 // log level string
 var lvlStr = []string{
+	"UNKNOWN",
 	"DEBUG",
 	"INFO",
 	"WARN",

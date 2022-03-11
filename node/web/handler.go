@@ -3,13 +3,11 @@ package web
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"github.com/dafsic/assistant/lib/mylog"
 	"github.com/dafsic/assistant/node"
 	"github.com/dafsic/assistant/utils"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/fx"
-	"io/ioutil"
 )
 
 type Handler struct {
@@ -18,13 +16,13 @@ type Handler struct {
 }
 
 func (h *Handler) SectorMsg(c *gin.Context) {
-	bodyBytes, _ := ioutil.ReadAll(c.Request.Body)
+	body, _ := c.Get("rawData")
 	var req struct {
 		SectorId string `json:"sector_id"`
 		State    string `json:"state"`
 	}
 
-	err := json.Unmarshal(bodyBytes, &req)
+	err := json.Unmarshal(body.([]byte), &req)
 	if err != nil {
 		h.log.Error(err.Error())
 		c.JSON(200, ErrIncorrectFormat)
@@ -61,7 +59,6 @@ func (h *Handler) Pledge(c *gin.Context) {
 }
 
 func RegisterRoutes(h *Handler, s *Server) {
-	fmt.Println("---register routes")
 	s.gin.GET("/ping", func(c *gin.Context) {
 		c.JSON(200, gin.H{"message": "OK"})
 	})
@@ -71,7 +68,6 @@ func RegisterRoutes(h *Handler, s *Server) {
 }
 
 func NewHandler(d node.AssistantI, l mylog.LoggingI) *Handler {
-	fmt.Println("---init Handler")
 	h := &Handler{
 		assistant: d,
 		log:       l.GetLogger("web"),

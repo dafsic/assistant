@@ -6,26 +6,25 @@ import (
 	"go.uber.org/fx"
 	"reflect"
 	"strings"
-	"time"
 )
 
 type ConfigI interface {
-	GetCfg(e string) interface{}
+	GetCfgElem(e string) interface{}
 }
 
 // FullNode is a full node config
 type AssistantNode struct {
-	LogLevel  string
-	API       API
-	MinerAPI  API
-	DaemonAPI API
+	LogLevel  string `toml:"loglevel"`
+	API       API    `toml:"api"`
+	MinerAPI  API    `toml:"minerapi"`
+	DaemonAPI API    `toml:"daemonapi"`
 }
 
 // API contains configs for API endpoint
 type API struct {
 	Address string
 	Token   string
-	Timeout time.Duration
+	Timeout int
 }
 
 func (a *AssistantNode) GetCfgElem(e string) interface{} {
@@ -43,8 +42,7 @@ func (a *AssistantNode) GetCfgElem(e string) interface{} {
 	return cnf
 }
 
-func NewAssCfg(ctx *cli.Context) (*AssistantNode, error) {
-	fmt.Println("---init assistant config")
+func NewAssCfg(ctx *cli.Context) (ConfigI, error) {
 	cp := ctx.String("config")
 	c, err := FromFile(cp, DefaultAssistantNode())
 	if err != nil {

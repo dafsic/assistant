@@ -2,7 +2,6 @@ package web
 
 import (
 	"context"
-	"fmt"
 	"github.com/dafsic/assistant/config"
 	"github.com/dafsic/assistant/lib/mylog"
 	"github.com/dafsic/assistant/utils"
@@ -19,19 +18,18 @@ type Server struct {
 }
 
 func NewRouter(lc fx.Lifecycle, cfg config.ConfigI, log mylog.LoggingI) *Server {
-	fmt.Println("---init router")
 	r := gin.New()
 	l := log.GetLogger("web")
 
 	r.Use(Logger(l))
-	api := cfg.GetCfg("api").(config.API)
+	api := cfg.GetCfgElem("api").(config.API)
 	web := &Server{
 		log: l,
 		gin: r,
 		srv: &http.Server{
 			Addr: api.Address,
 			// Good practice to set timeouts to avoid Slowloris attacks.
-			WriteTimeout: api.Timeout,
+			WriteTimeout: time.Second * time.Duration(api.Timeout),
 			ReadTimeout:  time.Second * 15,
 			IdleTimeout:  time.Second * 60,
 			Handler:      r,
@@ -41,10 +39,12 @@ func NewRouter(lc fx.Lifecycle, cfg config.ConfigI, log mylog.LoggingI) *Server 
 	lc.Append(fx.Hook{
 		// app.start调用
 		OnStart: func(ctx context.Context) error {
-			if err := web.srv.ListenAndServe(); err != nil {
-				web.log.Error(err)
-				return err
-			}
+			// 这里不能阻塞
+			go func() {
+				if err := web.srv.ListenAndServe(); err != nil {
+					web.log.Error(err)
+				}
+			}()
 			return nil
 		},
 		// app.stop调用，收到中断信号的时候调用app.stop

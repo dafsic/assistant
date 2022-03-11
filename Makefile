@@ -16,17 +16,17 @@ GO_LDFLAGS += -X '$(PROJECT)/version.GIT_BRANCH=$(GIT_BRANCH)'
 GO_LDFLAGS += -X '$(PROJECT)/version.PROJECT_VERSION=$(GIT_TAG)'
 GO_LDFLAGS += -s -w
 
-.PHONY: default plastic clean check
+.PHONY: default lotus-assistant clean check
 
-default: check plastic ## Build the default binary file
+default: check lotus-assistant ## Build the default binary file
 
 check: ## Check working tree is clean or not
 ifneq ($(shell git status -s),)
 	$(error You must run git commit)
 endif
 
-plastic: ## Build the ELF binary file
-	rm -f plastic
+lotus-assistant: ## Build the ELF binary file
+	rm -f lotus-assistant
 	GOOS=linux GOARCH=amd64 CGO_ENABLE=0 go build -ldflags "$(GO_LDFLAGS)" -o lotus-assistant ./cmd/assistant
 
 clean: ## Remove previous build
