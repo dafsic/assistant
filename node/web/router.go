@@ -53,6 +53,7 @@ func NewRouter(lc fx.Lifecycle, cfg config.ConfigI, log mylog.LoggingI) *Server 
 			return nil
 		},
 	})
+	fmt.Println("---done router")
 
 	return web
 }

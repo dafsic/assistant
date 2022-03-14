@@ -53,6 +53,7 @@ func NewAssCfg(ctx *cli.Context) (ConfigI, error) {
 	if !ok {
 		return nil, fmt.Errorf("invalid config for assistant, got: %T", c)
 	}
+	fmt.Println("---done assistant config")
 	return cfg, nil
 }
 

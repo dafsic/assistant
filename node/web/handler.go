@@ -61,13 +61,14 @@ func (h *Handler) Pledge(c *gin.Context) {
 }
 
 func RegisterRoutes(h *Handler, s *Server) {
-	fmt.Println("---register routes")
+	fmt.Println("---init register routes")
 	s.gin.GET("/ping", func(c *gin.Context) {
 		c.JSON(200, gin.H{"message": "OK"})
 	})
 
 	s.gin.GET("/pledge", h.Pledge)
 	s.gin.POST("/msg", h.SectorMsg)
+	fmt.Println("---done register routes")
 }
 
 func NewHandler(d node.AssistantI, l mylog.LoggingI) *Handler {
@@ -76,6 +77,7 @@ func NewHandler(d node.AssistantI, l mylog.LoggingI) *Handler {
 		assistant: d,
 		log:       l.GetLogger("web"),
 	}
+	fmt.Println("---done Handler")
 	return h
 }
 
