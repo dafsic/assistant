@@ -42,7 +42,7 @@ func (a *AssistantNode) GetCfgElem(e string) interface{} {
 	return cnf
 }
 
-func NewAssCfg(ctx *cli.Context) (*AssistantNode, error) {
+func NewAssCfg(ctx *cli.Context) (ConfigI, error) {
 	fmt.Println("---init assistant config")
 	cp := ctx.String("config")
 	c, err := FromFile(cp, DefaultAssistantNode())
