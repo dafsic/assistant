@@ -3,7 +3,6 @@ package web
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"github.com/dafsic/assistant/lib/mylog"
 	"github.com/dafsic/assistant/node"
 	"github.com/dafsic/assistant/utils"
@@ -61,23 +60,19 @@ func (h *Handler) Pledge(c *gin.Context) {
 }
 
 func RegisterRoutes(h *Handler, s *Server) {
-	fmt.Println("---init register routes")
 	s.gin.GET("/ping", func(c *gin.Context) {
 		c.JSON(200, gin.H{"message": "OK"})
 	})
 
 	s.gin.GET("/pledge", h.Pledge)
 	s.gin.POST("/msg", h.SectorMsg)
-	fmt.Println("---done register routes")
 }
 
 func NewHandler(d node.AssistantI, l mylog.LoggingI) *Handler {
-	fmt.Println("---init Handler")
 	h := &Handler{
 		assistant: d,
 		log:       l.GetLogger("web"),
 	}
-	fmt.Println("---done Handler")
 	return h
 }
 

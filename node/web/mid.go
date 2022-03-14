@@ -38,12 +38,12 @@ func Logger(l *utils.Logger) gin.HandlerFunc {
 			urlPath = urlPath + "?" + raw
 		}
 
-		l.Infof("|%s|%s|%s|%s\n",
-			clientIP,
-			method,
-			urlPath,
-			strings.ReplaceAll(string(bodyBytes), "\n", ""),
-		)
+		//l.Infof("|%s|%s|%s|%s\n",
+		//	clientIP,
+		//	method,
+		//	urlPath,
+		//	strings.ReplaceAll(string(bodyBytes), "\n", ""),
+		//)
 
 		ctx.Set("rawData", bodyBytes)
 		blw := responseLogWriter{responseBody: bytes.NewBufferString(""), ResponseWriter: ctx.Writer}
@@ -56,14 +56,14 @@ func Logger(l *utils.Logger) gin.HandlerFunc {
 
 		statusCode := ctx.Writer.Status()
 
-		l.Infof("|%d|%v|%s|%s|%s|%s\n",
+		l.Infof("|%d|%v|%s|%s|%s|%s|%s\n",
 			statusCode,
 			latency,
 			clientIP,
 			method,
 			urlPath,
 			strings.ReplaceAll(string(bodyBytes), "\n", ""),
-			//blw.responseBody.Bytes(),
+			blw.responseBody.Bytes(),
 		)
 	}
 }

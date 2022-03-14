@@ -2,7 +2,6 @@ package web
 
 import (
 	"context"
-	"fmt"
 	"github.com/dafsic/assistant/config"
 	"github.com/dafsic/assistant/lib/mylog"
 	"github.com/dafsic/assistant/utils"
@@ -19,7 +18,6 @@ type Server struct {
 }
 
 func NewRouter(lc fx.Lifecycle, cfg config.ConfigI, log mylog.LoggingI) *Server {
-	fmt.Println("---init router")
 	r := gin.New()
 	l := log.GetLogger("web")
 
@@ -55,7 +53,6 @@ func NewRouter(lc fx.Lifecycle, cfg config.ConfigI, log mylog.LoggingI) *Server 
 			return nil
 		},
 	})
-	fmt.Println("---done router")
 
 	return web
 }

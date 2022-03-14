@@ -53,12 +53,10 @@ func (a *AssistantImpl) Pledge(ctx context.Context) (string, error) {
 }
 
 func NewAssistant(cfg config.ConfigI) AssistantI {
-	fmt.Println("---init assistant instance")
 	a := &AssistantImpl{
 		minerAPI:  cfg.GetCfgElem("minerapi").(config.API),
 		deamonAPI: cfg.GetCfgElem("daemonapi").(config.API),
 	}
-	fmt.Println("---done assistant instance")
 	return a
 }
 

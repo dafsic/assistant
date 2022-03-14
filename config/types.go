@@ -43,7 +43,6 @@ func (a *AssistantNode) GetCfgElem(e string) interface{} {
 }
 
 func NewAssCfg(ctx *cli.Context) (ConfigI, error) {
-	fmt.Println("---init assistant config")
 	cp := ctx.String("config")
 	c, err := FromFile(cp, DefaultAssistantNode())
 	if err != nil {
@@ -53,7 +52,6 @@ func NewAssCfg(ctx *cli.Context) (ConfigI, error) {
 	if !ok {
 		return nil, fmt.Errorf("invalid config for assistant, got: %T", c)
 	}
-	fmt.Println("---done assistant config")
 	return cfg, nil
 }
 

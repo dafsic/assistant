@@ -2,7 +2,6 @@
 package mylog
 
 import (
-	"fmt"
 	"github.com/dafsic/assistant/config"
 	"github.com/dafsic/assistant/utils"
 	"go.uber.org/fx"
@@ -38,13 +37,11 @@ var l LoggingI
 
 func NewMylog(cfg config.ConfigI) LoggingI {
 	once.Do(func() {
-		fmt.Println("---init mylog")
 		var t LoggingT
 		t.output = os.Stdout
 		t.lvl = cfg.GetCfgElem("logLevel").(string)
 		t.loggers = make(map[string]*utils.Logger, 8)
 		l = &t
-		fmt.Println("---done mylog")
 	})
 	return l
 }
