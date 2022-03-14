@@ -8,7 +8,6 @@ import (
 	"github.com/dafsic/assistant/utils"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/fx"
-	"io/ioutil"
 )
 
 type Handler struct {
@@ -17,13 +16,13 @@ type Handler struct {
 }
 
 func (h *Handler) SectorMsg(c *gin.Context) {
-	bodyBytes, _ := ioutil.ReadAll(c.Request.Body)
+	body, _ := c.Get("rawData")
 	var req struct {
 		SectorId string `json:"sector_id"`
 		State    string `json:"state"`
 	}
 
-	err := json.Unmarshal(bodyBytes, &req)
+	err := json.Unmarshal(body.([]byte), &req)
 	if err != nil {
 		h.log.Error(err.Error())
 		c.JSON(200, ErrIncorrectFormat)
