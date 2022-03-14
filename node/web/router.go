@@ -24,14 +24,14 @@ func NewRouter(lc fx.Lifecycle, cfg config.ConfigI, log mylog.LoggingI) *Server 
 	l := log.GetLogger("web")
 
 	r.Use(Logger(l))
-	api := cfg.GetCfg("api").(config.API)
+	api := cfg.GetCfgElem("api").(config.API)
 	web := &Server{
 		log: l,
 		gin: r,
 		srv: &http.Server{
 			Addr: api.Address,
 			// Good practice to set timeouts to avoid Slowloris attacks.
-			WriteTimeout: api.Timeout,
+			WriteTimeout: time.Second * time.Duration(api.Timeout),
 			ReadTimeout:  time.Second * 15,
 			IdleTimeout:  time.Second * 60,
 			Handler:      r,
