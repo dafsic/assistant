@@ -41,7 +41,7 @@ func NewMylog(cfg config.ConfigI) LoggingI {
 		fmt.Println("---init mylog")
 		var t LoggingT
 		t.output = os.Stdout
-		t.lvl = cfg.GetCfg("logLevel").(string)
+		t.lvl = cfg.GetCfgElem("logLevel").(string)
 		t.loggers = make(map[string]*utils.Logger, 8)
 		l = &t
 	})
