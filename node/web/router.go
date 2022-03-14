@@ -41,10 +41,12 @@ func NewRouter(lc fx.Lifecycle, cfg config.ConfigI, log mylog.LoggingI) *Server 
 	lc.Append(fx.Hook{
 		// app.start调用
 		OnStart: func(ctx context.Context) error {
-			if err := web.srv.ListenAndServe(); err != nil {
-				web.log.Error(err)
-				return err
-			}
+			// 这里不能阻塞
+			go func() {
+				if err := web.srv.ListenAndServe(); err != nil {
+					web.log.Error(err)
+				}
+			}()
 			return nil
 		},
 		// app.stop调用，收到中断信号的时候调用app.stop

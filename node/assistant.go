@@ -10,7 +10,6 @@ import (
 	lotusapi "github.com/filecoin-project/lotus/api"
 	"go.uber.org/fx"
 	"net/http"
-	"reflect"
 )
 
 type AssistantI interface {
@@ -55,12 +54,9 @@ func (a *AssistantImpl) Pledge(ctx context.Context) (string, error) {
 
 func NewAssistant(cfg config.ConfigI) AssistantI {
 	fmt.Println("---init assistant instance")
-	minerapi := cfg.GetCfgElem("minerapi")
-	fmt.Println(reflect.TypeOf(minerapi).String())
 	a := &AssistantImpl{
-		minerAPI: minerapi.(config.API),
-		//minerAPI:  cfg.GetCfgElem("minerapi").(config.API),
-		deamonAPI: cfg.GetCfgElem("deamonapi").(config.API),
+		minerAPI:  cfg.GetCfgElem("minerapi").(config.API),
+		deamonAPI: cfg.GetCfgElem("daemonapi").(config.API),
 	}
 	fmt.Println("---done assistant instance")
 	return a
