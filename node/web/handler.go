@@ -15,6 +15,27 @@ type Handler struct {
 	log       *utils.Logger
 }
 
+func (h *Handler) SwitchOn(c *gin.Context) {
+	node.On()
+	c.JSON(200, responseSuccess("ok"))
+}
+
+func (h *Handler) SwitchOff(c *gin.Context) {
+	node.Off()
+	c.JSON(200, responseSuccess("ok"))
+}
+
+func (h *Handler) SwitchState(c *gin.Context) {
+	s := node.State()
+	msg := "Unknown"
+	if s == 0 {
+		msg = "Off"
+	} else if s == 1 {
+		msg = "On"
+	}
+	c.JSON(200, responseSuccess(msg))
+}
+
 func (h *Handler) SectorMsg(c *gin.Context) {
 	body, _ := c.Get("rawData")
 	var req struct {
@@ -65,6 +86,9 @@ func RegisterRoutes(h *Handler, s *Server) {
 
 	s.gin.GET("/pledge", h.Pledge)
 	s.gin.POST("/msg", h.SectorMsg)
+	s.gin.GET("/switch/on", h.SwitchOn)
+	s.gin.GET("/switch/off", h.SwitchOff)
+	s.gin.GET("/switch/state", h.SwitchState)
 }
 
 func NewHandler(d node.AssistantI, l mylog.LoggingI) *Handler {
