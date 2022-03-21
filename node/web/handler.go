@@ -29,7 +29,7 @@ func (h *Handler) SectorMsg(c *gin.Context) {
 		return
 	}
 
-	if req.State != "p2-done" {
+	if req.State != "p2-done" || node.State() == 0 {
 		h.log.Infof("sector id: %s, state: %s", req.SectorId, req.State)
 		c.JSON(200, responseSuccess("ok"))
 		return

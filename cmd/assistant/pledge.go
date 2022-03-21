@@ -12,14 +12,14 @@ var pledgeCmd = &cli.Command{
 	Usage: "Add a CC sector",
 	Flags: []cli.Flag{
 		&cli.StringFlag{
-			Name:  "minerapi",
-			Value: "192.168.28.136:6660",
-			Usage: "指定miner地址, default 192.168.28.136:6660",
+			Name:  "assapi",
+			Value: "192.168.28.172:6660",
+			Usage: "指定miner地址, default 192.168.28.172:6660",
 		},
 	},
 
 	Action: func(cctx *cli.Context) error {
-		url := fmt.Sprintf("http://%s/pledge", cctx.String("minerapi"))
+		url := fmt.Sprintf("http://%s/pledge", cctx.String("assapi"))
 		req, err := http.NewRequest("GET", url, nil)
 		if err != nil {
 			fmt.Println(err.Error())
